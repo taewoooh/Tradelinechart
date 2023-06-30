@@ -152,10 +152,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (linechartday == 100) {
 
-
+            max = entries.get(entries.size() - 1).getX();
+            min = entries.get(0).getX();
             lineChart.setData(lineData);
 
-           // labelcount = labelcount;
+
 
             xAxis.setLabelCount((int) xterm, true);
 
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lineChart.setData(lineData);
 
 
-            this.min = max - 5;
+            this.min = max - 5;///////// 최근 5년
 
             xAxis.setLabelCount(5, true);
             xAxis.setAxisMinimum(this.min);
@@ -238,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lineChart.setData(lineData);
 
 
-            this.min = max - 10;
+            this.min = max - 10;///////// 최근 10년
 
             xAxis.setLabelCount(6, true);
             xAxis.setAxisMinimum(this.min);
