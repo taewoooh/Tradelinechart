@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     XAxis xAxis;
     YAxis yLAxis;
     float maxx, minx;
+    float maxy, miny;
     int xterm;
     LineData lineData;
     int b_btn, j_btn, m_btn;
@@ -88,22 +89,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         infor = 0;
         Findview();
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        marker.setChartView(lineChart);
-        lineChart.setMarker(marker);
+//        marker.setChartView(lineChart);
+//        lineChart.setMarker(marker);
         Tongsin("서울특별시");
 
 
         b_btn = 1;
         j_btn = 1;
         m_btn = 1;
-//        marker.setChartView(lineChart);
-//        lineChart.setMarker(marker);
+        marker.setChartView(lineChart);
+        lineChart.setMarker(marker);
 
 
         lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 // Toast.makeText(getApplicationContext(),entries.indexOf(e)+"",Toast.LENGTH_SHORT).show();
+
+                if (b_btn == 0 && j_btn == 0 && m_btn == 0 ) {
+                    vibrator.cancel();
+
+                    lineChart.highlightValue(null);
+
+
+                } else {
+
+                    vibrator.vibrate(10);
+
+                }
+
                 int v = bentries.indexOf(e);
                 String ymd1 = null;
                 String ymd2 = null;
@@ -179,8 +193,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     i2 = (int) rentries.get(v).getY();
                     i3 = (int) rentries.get(v).getY();
 
-                    vibrator.vibrate(10);
+
                     btntext();
+
+
                     chartymd.setText(ymd1 + "월 / ");
                     chartpirce.setText("거래건수 : " + String.valueOf(i1) + " / 최고건수대비율 : ");
                     chartgunsu.setText(bentries.get(v).getData() + " %");
@@ -256,31 +272,125 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.e("버튼상태 확인", " - > " + b_btn + " / " + j_btn + " / " + m_btn + " / " + s);
         new TWPreference(MainActivity.this).putString("매매전세월세버튼2", s);
 
+        new TWPreference(this).putInt("기간", linechartday);
+
     }
 
-    public void btncheck2() {  //비지블
+    public void gigancheck() {  //비지블
 
-        Log.e("BTNCHECK", "" + b_btn + " / " + j_btn + " / " + m_btn);
+        xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //시발
+        xAxis.enableGridDashedLine(8, 24, 0);
+        Log.e("기간체크",""+new TWPreference(this).getInt("기간",100));
 
-        if (b_btn == 1 && j_btn == 0 && m_btn == 0) {
-
-
-        } else if (b_btn == 0 && j_btn == 1 && m_btn == 0) {
-
-
-        } else if (b_btn == 0 && j_btn == 0 && m_btn == 1) {
+        if (new TWPreference(this).getInt("기간",100) == 100) {
 
 
-        } else if (b_btn == 0 && j_btn == 0 && m_btn == 0) {
+            lineChart.setData(lineData);
 
 
-        } else if (b_btn == 1 && j_btn == 1 && m_btn == 0) {   //
+            xAxis.setLabelCount((int) xterm, true);
 
-        } else if (b_btn == 1 && j_btn == 0 && m_btn == 1) { // 2
+            xAxis.setAxisMinimum(minx);
 
-        } else if (b_btn == 0 && j_btn == 1 && m_btn == 1) { /// 3
 
-        } else if (b_btn == 1 && j_btn == 1 && m_btn == 1) { /// 3
+            xAxis.setAxisMaximum(maxx);
+            lineChart.invalidate();
+
+
+            Linecharttype100.setCardBackgroundColor(getColor(R.color.On_Btcolor));
+            Linecharttext100.setTextColor(getColor(R.color.On_Textwcolor));
+
+            Linecharttype1.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext1.setTextColor(getColor(R.color.Off_Textcolor));
+
+            Linecharttype3.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext3.setTextColor(getColor(R.color.Off_Textcolor));
+            Linecharttype2.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext2.setTextColor(getColor(R.color.Off_Textcolor));
+
+
+        } else if (new TWPreference(this).getInt("기간",100) == 1) {
+
+
+            linechartday = 1;
+
+            lineChart.setData(lineData);
+
+            this.minx = maxx - 3; ///////// 최근 3년
+
+            xAxis.setLabelCount(4, true);
+            xAxis.setAxisMinimum(this.minx);
+            xAxis.setAxisMaximum(maxx);
+
+            lineChart.invalidate();
+
+
+            Linecharttype1.setCardBackgroundColor(getColor(R.color.On_Btcolor));
+            Linecharttext1.setTextColor(getColor(R.color.On_Textwcolor));
+
+            Linecharttype100.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext100.setTextColor(getColor(R.color.Off_Textcolor));
+
+            Linecharttype3.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext3.setTextColor(getColor(R.color.Off_Textcolor));
+            Linecharttype2.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext2.setTextColor(getColor(R.color.Off_Textcolor));
+
+
+        } else if (new TWPreference(this).getInt("기간",100) == 2) {
+
+
+            lineChart.setData(lineData);
+
+
+            this.minx = maxx - 5;///////// 최근 5년
+
+            xAxis.setLabelCount(5, true);
+            xAxis.setAxisMinimum(this.minx);
+            xAxis.setAxisMaximum(maxx);
+            lineChart.invalidate();
+
+            Linecharttype2.setCardBackgroundColor(getColor(R.color.On_Btcolor));
+            Linecharttext2.setTextColor(getColor(R.color.On_Textwcolor));
+
+            Linecharttype1.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext1.setTextColor(getColor(R.color.Off_Textcolor));
+
+            Linecharttype3.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext3.setTextColor(getColor(R.color.Off_Textcolor));
+
+
+            Linecharttype100.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext100.setTextColor(getColor(R.color.Off_Textcolor));
+
+
+        } else if (new TWPreference(this).getInt("기간",100) == 3) {
+
+            lineChart.setData(lineData);
+
+
+            this.minx = maxx - 10;///////// 최근 10년
+
+            xAxis.setLabelCount(6, true);
+            xAxis.setAxisMinimum(this.minx);
+            xAxis.setAxisMaximum(maxx);
+
+            lineChart.invalidate();
+
+
+            Linecharttype3.setCardBackgroundColor(getColor(R.color.On_Btcolor));
+            Linecharttext3.setTextColor(getColor(R.color.On_Textwcolor));
+
+            Linecharttype1.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext1.setTextColor(getColor(R.color.Off_Textcolor));
+
+            Linecharttype2.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext2.setTextColor(getColor(R.color.Off_Textcolor));
+
+
+            Linecharttype100.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+            Linecharttext100.setTextColor(getColor(R.color.Off_Textcolor));
 
 
         }
@@ -516,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void Datasetting1() {
 
         btnGone();
+
         Buyset();
         Rentset();
         Monthset();
@@ -525,6 +636,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        min = bentries.get(0).getX();
 
         MaxX();
+        //MaxY();
 
 
 
@@ -551,56 +663,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void MaxX() {  //비지블
 
 
+        if (rentries.get(rentries.size() - 1).getX() > bentries.get(bentries.size() - 1).getX()) {
 
-            if (rentries.get(rentries.size() - 1).getX() > bentries.get(bentries.size() - 1).getX()) {
+            maxx = bentries.get(bentries.size() - 1).getX();
+        } else if (rentries.get(rentries.size() - 1).getX() < bentries.get(bentries.size() - 1).getX()) {
+            maxx = bentries.get(bentries.size() - 1).getX();
+        } else if (rentries.get(rentries.size() - 1).getX() == bentries.get(bentries.size() - 1).getX()) {
 
-                maxx = bentries.get(bentries.size() - 1).getX();
-            } else if (rentries.get(rentries.size() - 1).getX() < bentries.get(bentries.size() - 1).getX()) {
-                maxx = bentries.get(bentries.size() - 1).getX();
-            } else if (rentries.get(rentries.size() - 1).getX() == bentries.get(bentries.size() - 1).getX()) {
-
-                maxx = bentries.get(bentries.size() - 1).getX();
-            }
-
-
-            if (maxx > mentries.get(mentries.size() - 1).getX()) {
+            maxx = bentries.get(bentries.size() - 1).getX();
+        }
 
 
-            } else {
+        if (maxx > mentries.get(mentries.size() - 1).getX()) {
 
 
-                maxx = mentries.get(mentries.size() - 1).getX();
-            }
+        } else {
 
 
-            if (rentries.get(0).getX() > bentries.get(0).getX()) {
+            maxx = mentries.get(mentries.size() - 1).getX();
+        }
 
 
-                minx = bentries.get(0).getX();
-            } else if (rentries.get(0).getX() < bentries.get(0).getX()) {
-
-                minx = rentries.get(0).getX();
-
-            } else {
-
-                minx = rentries.get(0).getX();
-            }
+        if (rentries.get(0).getX() > bentries.get(0).getX()) {
 
 
-            if (minx < mentries.get(0).getX()) {
+            minx = bentries.get(0).getX();
+        } else if (rentries.get(0).getX() < bentries.get(0).getX()) {
+
+            minx = rentries.get(0).getX();
+
+        } else {
+
+            minx = rentries.get(0).getX();
+        }
 
 
-            } else {
+        if (minx < mentries.get(0).getX()) {
 
 
-                minx = mentries.get(0).getX();
-            }
+        } else {
 
+
+            minx = mentries.get(0).getX();
+        }
 
 
     }
 
 
+
+    public void MaxY() {  //비지블
+
+
+        if (rentries.get(rentries.size() - 1).getY() > bentries.get(bentries.size() - 1).getY()) {
+
+            maxy = bentries.get(bentries.size() - 1).getY();
+        } else if (rentries.get(rentries.size() - 1).getY() < bentries.get(bentries.size() - 1).getY()) {
+            maxy = bentries.get(bentries.size() - 1).getY();
+        } else if (rentries.get(rentries.size() - 1).getY() == bentries.get(bentries.size() - 1).getY()) {
+
+            maxy = bentries.get(bentries.size() - 1).getY();
+        }
+
+
+        if (maxy > mentries.get(mentries.size() - 1).getY()) {
+
+
+        } else {
+
+
+            maxy = mentries.get(mentries.size() - 1).getY();
+        }
+
+
+        if (rentries.get(0).getY() > bentries.get(0).getY()) {
+
+
+            maxy = bentries.get(0).getY();
+        } else if (rentries.get(0).getY() < bentries.get(0).getY()) {
+
+            maxy = rentries.get(0).getY();
+
+        } else {
+
+            maxy = rentries.get(0).getY();
+        }
+
+
+        if (maxy < mentries.get(0).getY()) {
+
+
+        } else {
+
+
+            maxy = mentries.get(0).getY();
+        }
+
+
+    }
 
 
     public void Findview() {
@@ -671,6 +831,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             lineChart.setData(lineData);
 
+            MaxX();
 
             xAxis.setLabelCount((int) xterm, true);
 
@@ -854,25 +1015,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void Datasetting2() {
 
-
+        Log.e("기간체크",""+new TWPreference(this).getInt("기간",100));
         Legend l = lineChart.getLegend();
         l.setEnabled(false);
 
 
-        lineChart.setData(lineData);
+        gigancheck();
 
 
-        xAxis = lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(Color.BLACK);
-        xAxis.enableGridDashedLine(8, 24, 0);
-        xAxis.setAxisMinimum(minx);
-
-
-        xAxis.setAxisMaximum(maxx);
-
-
-        xAxis.setLabelCount((int) 7, true);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -891,7 +1041,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         yLAxis = lineChart.getAxisLeft();
         yLAxis.setTextColor(Color.BLACK);
 
-        yLAxis.setLabelCount(5, true);
+        yLAxis.setAxisMinimum(0);
+
+
+        Log.e("거래건수체킹","-->"+bentries.get(bentries.size()-1).getY()+" / "+rentries.get(rentries.size()-1).getY()+" / "+mentries.get(mentries.size()-1).getY());
+      //  yLAxis.setAxisMaximum(max2 + 4);
+
+        yLAxis.setLabelCount(6, true);
 
         YAxis yRAxis = lineChart.getAxisRight();
 
@@ -980,7 +1136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {  // on
 
-                   // Timelimit();
+                    // Timelimit();
                     BDataSet.setVisible(true);
                     lineChart.invalidate();
                     if (infor == 1) {
@@ -1013,7 +1169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {  // on
 
-                   // Timelimit();
+                    // Timelimit();
                     RDataSet.setVisible(true);
                     lineChart.invalidate();
                     if (infor == 1) {
@@ -1048,7 +1204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 } else {
-                   // Timelimit();
+                    // Timelimit();
                     MDataSet.setVisible(true);
                     lineChart.invalidate();
 

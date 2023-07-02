@@ -413,7 +413,7 @@
                         android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1.5"
-                        app:cardBackgroundColor="@color/On_Btcolor"
+
 
                         app:cardCornerRadius="10dp"
                         app:cardElevation="2dp"
@@ -425,7 +425,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal|center_vertical"
                             android:text="전체기간"
-                            android:textColor="@color/On_Textwcolor"
+                            android:textColor="@color/Off_Textcolor"
                             android:textSize="@dimen/Linechartbtn"
                             android:textStyle="bold">
 
