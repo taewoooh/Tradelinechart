@@ -7,11 +7,13 @@ import androidx.cardview.widget.CardView;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -24,51 +26,180 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.EntryXComparator;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private LineChart lineChart;
     MyMarkerView marker;
-    TextView chartymd, chartpirce, chartgunsu;
-    List<Entry> entries;
-    LineDataSet lineDataSet;
+    private final String BASE_URL = "https://taewoooh88.cafe24.com/";
+    Retrofit retrofit;
+    List<Entry> entries, bentries, rentries, mentries;
+    LineDataSet BDataSet, RDataSet, MDataSet;
+    private long backpressedTime = 0;
     int linechartday;
     XAxis xAxis;
     YAxis yLAxis;
-    float max, min;
+    float maxx, minx;
     int xterm;
     LineData lineData;
-
+    int b_btn, j_btn, m_btn;
     TextView Linecharttext1, Linecharttext2, Linecharttext3, Linecharttext100;
     CardView Linecharttype1, Linecharttype2, Linecharttype3, Linecharttype100;
+
+    TextView chartymd, chartpirce, chartgunsu, rchartymd, rchartpirce, rchartgunsu, mchartymd, mchartpirce, mchartgunsu;
+
+    RelativeLayout linechartlayout10;
+    CardView m1, j1, g1;
+    TextView m2, j2, g2;
+    Vibrator vibrator;
+    RelativeLayout linechartlayout2, linechartlayout3, linechartlayout4;
+    int infor = 0;
+
+    int bentries_c = 0;
+    int rentries_c = 0;
+    int mentries_c = 0;
+
+    int brlistitem_c = 0;
+
+    int blistitem_c = 0;
+    int bmlistitem_c = 0;
+    int rlistitem_c = 0;
+    int rmlistitem_c = 0;
+    int mlistitem_c = 0;
+    int brmlistitem_c = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        infor = 0;
         Findview();
-        Datasetting();
-
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         marker.setChartView(lineChart);
         lineChart.setMarker(marker);
+        Tongsin("서울특별시");
 
+
+        b_btn = 1;
+        j_btn = 1;
+        m_btn = 1;
+//        marker.setChartView(lineChart);
+//        lineChart.setMarker(marker);
 
 
         lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 // Toast.makeText(getApplicationContext(),entries.indexOf(e)+"",Toast.LENGTH_SHORT).show();
-                int v = entries.indexOf(e);
-                Log.e("테스트", "" + entries.get(v).getX() + " / " + entries.indexOf(e));
-                String ymd = String.valueOf(entries.get(v).getX());
-                String p = String.valueOf(entries.get(v).getY());
+                int v = bentries.indexOf(e);
+                String ymd1 = null;
+                String ymd2 = null;
+                String ymd3 = null;
+                int i1 = 0;
+                int i2 = 0;
+                int i3 = 0;
 
-                chartymd.setText(ymd + "월 / ");
-                chartpirce.setText("평균 "+p + "만원 / ");
-                chartgunsu.setText("4"+" 건");
+                infor = 1;
+
+                try {
+
+
+                    linechartlayout10.setVisibility(View.GONE);
+//
+
+
+                    ymd1 = String.valueOf(bentries.get(v).getX());
+                    ymd2 = String.valueOf(rentries.get(v).getX());
+                    ymd3 = String.valueOf(mentries.get(v).getX());
+
+                    int b = ymd1.indexOf(".");
+                    String b2 = ymd1.substring(b + 1);
+                    String b1 = ymd1.substring(0, b);
+
+                    int r = ymd1.indexOf(".");
+                    String r2 = ymd1.substring(r + 1);
+                    String r1 = ymd1.substring(0, r);
+
+                    int m = ymd1.indexOf(".");
+                    String m2 = ymd1.substring(m = +1);
+                    String m1 = ymd1.substring(0, m);
+
+
+                    if (b2.equals("91")) {
+                        ymd1 = b1 + "." + "10";
+
+                    } else if (b2.equals("92")) {
+                        ymd1 = b1 + "." + "11";
+
+                    } else if (b2.equals("93")) {
+                        ymd1 = b1 + "." + "12";
+
+                    }
+
+
+                    if (r2.equals("91")) {
+                        ymd2 = r1 + "." + "10";
+
+                    } else if (r2.equals("92")) {
+                        ymd2 = r1 + "." + "11";
+
+                    } else if (r2.equals("93")) {
+                        ymd2 = r1 + "." + "12";
+
+                    }
+
+
+                    if (m2.equals("91")) {
+                        ymd3 = m1 + "." + "10";
+
+                    } else if (m2.equals("92")) {
+                        ymd3 = m1 + "." + "11";
+
+                    } else if (m2.equals("93")) {
+                        ymd3 = m1 + "." + "12";
+
+                    }
+                    Log.e("테스트", "" + b1 + " / " + b2 + " / " + ymd1);
+
+
+                    i1 = (int) bentries.get(v).getY();
+                    i2 = (int) rentries.get(v).getY();
+                    i3 = (int) rentries.get(v).getY();
+
+                    vibrator.vibrate(10);
+                    btntext();
+                    chartymd.setText(ymd1 + "월 / ");
+                    chartpirce.setText("거래건수 : " + String.valueOf(i1) + " / 최고건수대비율 : ");
+                    chartgunsu.setText(bentries.get(v).getData() + " %");
+
+                    rchartymd.setText(ymd2 + "월 / ");
+                    rchartpirce.setText("거래건수 : " + String.valueOf(i2) + " / 최고건수대비율 : ");
+                    rchartgunsu.setText(rentries.get(v).getData() + " %");
+
+                    mchartymd.setText(ymd3 + "월 / ");
+                    mchartpirce.setText("거래건수 : " + String.valueOf(i3) + " / 최고건수대비율 : ");
+                    mchartgunsu.setText(mentries.get(v).getData() + " %");
+
+
+                } catch (Exception s) {
+
+
+                }
+
+
             }
 
             @Override
@@ -80,28 +211,325 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void Datasetting() {
+    public void btncheck1() {
 
-        entries.add(new Entry((float) 1992.2, (float) 10.5));
-        entries.add(new Entry((float) 1994.3, (float) 10));
-        entries.add(new Entry((float) 1996.5, (float) 17.5));
-        entries.add(new Entry((float) 1998.2, (float) 9));
-        entries.add(new Entry((float) 2001.4, (float) 16));
-        entries.add(new Entry((float) 2007.6, (float) 18));
-        entries.add(new Entry((float) 2010.2, (float) 20));
-        entries.add(new Entry((float) 2012.2, (float) 22.5));
-        entries.add(new Entry((float) 2014.2, (float) 20));
-        entries.add(new Entry((float) 2017.6, (float) 23.5));
-        entries.add(new Entry((float) 2019.8, (float) 28));
-        entries.add(new Entry((float) 2021.5, (float) 28.9));
-        entries.add(new Entry((float) 2021.6, (float) 31));
-        entries.add(new Entry((float) 2022.11, (float) 32));
-        entries.add(new Entry((float) 2023.8, (float) 34.5));
+        if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("100")) {
+            j1.performClick();
+            g1.performClick();
 
-        max = entries.get(entries.size() - 1).getX();
-        min = entries.get(0).getX();
 
-        float minus = max - min;
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("010")) {
+            m1.performClick();
+            g1.performClick();
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("001")) {
+            m1.performClick();
+            j1.performClick();
+
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("000")) {
+
+            m1.performClick();
+            j1.performClick();
+            g1.performClick();
+
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("110")) {
+            g1.performClick();
+
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("101")) {
+            j1.performClick();
+
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("011")) {
+            m1.performClick();
+
+        } else if (new TWPreference(MainActivity.this).getString("매매전세월세버튼2", "111").equals("111")) {
+
+
+        }
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        String s = String.valueOf(b_btn) + String.valueOf(j_btn) + String.valueOf(m_btn);
+        Log.e("버튼상태 확인", " - > " + b_btn + " / " + j_btn + " / " + m_btn + " / " + s);
+        new TWPreference(MainActivity.this).putString("매매전세월세버튼2", s);
+
+    }
+
+    public void btncheck2() {  //비지블
+
+        Log.e("BTNCHECK", "" + b_btn + " / " + j_btn + " / " + m_btn);
+
+        if (b_btn == 1 && j_btn == 0 && m_btn == 0) {
+
+
+        } else if (b_btn == 0 && j_btn == 1 && m_btn == 0) {
+
+
+        } else if (b_btn == 0 && j_btn == 0 && m_btn == 1) {
+
+
+        } else if (b_btn == 0 && j_btn == 0 && m_btn == 0) {
+
+
+        } else if (b_btn == 1 && j_btn == 1 && m_btn == 0) {   //
+
+        } else if (b_btn == 1 && j_btn == 0 && m_btn == 1) { // 2
+
+        } else if (b_btn == 0 && j_btn == 1 && m_btn == 1) { /// 3
+
+        } else if (b_btn == 1 && j_btn == 1 && m_btn == 1) { /// 3
+
+
+        }
+
+    }
+
+    public void btntext() {  //비지블
+
+        Log.e("BTNCHECK", "" + b_btn + " / " + j_btn + " / " + m_btn);
+
+        if (b_btn == 1 && j_btn == 0 && m_btn == 0) {
+
+            linechartlayout2.setVisibility(View.VISIBLE);
+            linechartlayout3.setVisibility(View.GONE);
+            linechartlayout4.setVisibility(View.GONE);
+
+
+        } else if (b_btn == 0 && j_btn == 1 && m_btn == 0) {
+            linechartlayout2.setVisibility(View.GONE);
+            linechartlayout3.setVisibility(View.VISIBLE);
+            linechartlayout4.setVisibility(View.GONE);
+
+        } else if (b_btn == 0 && j_btn == 0 && m_btn == 1) {
+
+            linechartlayout2.setVisibility(View.GONE);
+            linechartlayout3.setVisibility(View.GONE);
+            linechartlayout4.setVisibility(View.VISIBLE);
+        } else if (b_btn == 0 && j_btn == 0 && m_btn == 0) {
+
+            linechartlayout2.setVisibility(View.GONE);
+            linechartlayout3.setVisibility(View.GONE);
+            linechartlayout4.setVisibility(View.GONE);
+        } else if (b_btn == 1 && j_btn == 1 && m_btn == 0) {   //
+            linechartlayout2.setVisibility(View.VISIBLE);
+            linechartlayout3.setVisibility(View.VISIBLE);
+            linechartlayout4.setVisibility(View.GONE);
+        } else if (b_btn == 1 && j_btn == 0 && m_btn == 1) { // 2
+            linechartlayout2.setVisibility(View.VISIBLE);
+            linechartlayout3.setVisibility(View.GONE);
+            linechartlayout4.setVisibility(View.VISIBLE);
+        } else if (b_btn == 0 && j_btn == 1 && m_btn == 1) { /// 3
+            linechartlayout2.setVisibility(View.GONE);
+            linechartlayout3.setVisibility(View.VISIBLE);
+            linechartlayout4.setVisibility(View.VISIBLE);
+        } else if (b_btn == 1 && j_btn == 1 && m_btn == 1) { /// 3
+
+            linechartlayout2.setVisibility(View.VISIBLE);
+            linechartlayout3.setVisibility(View.VISIBLE);
+            linechartlayout4.setVisibility(View.VISIBLE);
+
+        }
+
+    }
+
+    public void init() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+        // GSON 컨버터를 사용하는 REST 어댑터 생성
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+
+    }
+
+    public void Tongsin(String jiyeok) {   //통신
+
+        Btongsin(jiyeok);
+        Rtongsin(jiyeok);
+        Mtongsin(jiyeok);
+    }
+
+    public void Btongsin(String today) { // 서버 데이터를 가지고 온다 파라미터는 불러올 테이블 이름
+
+        // progressDialog.show();
+        init();
+        Daydatagithup gitHub = retrofit.create(Daydatagithup.class);
+        Call<List<Daydatalistitem>> call = gitHub.contributors(today);
+        call.enqueue(new Callback<List<Daydatalistitem>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            // 성공시
+            public void onResponse(Call<List<Daydatalistitem>> call, Response<List<Daydatalistitem>> result) {
+                List<Daydatalistitem> contributors = result.body();
+                // 받아온 리스트를 순회하면서
+
+                Log.e("Test888", result.body().toString());
+
+                for (Daydatalistitem contributor : contributors) {
+
+
+                    String si = contributor.si;
+                    int year = contributor.year;
+                    int month = contributor.month;
+                    int yearmonth = contributor.yearmonth;
+                    int trade = contributor.trade;
+                    String per = contributor.per;
+                    String ym = contributor.ym;
+
+                    int hightrade = contributor.hightrade;
+                    int highyear = contributor.highyear;
+                    int highmonth = contributor.highmonth;
+
+                    int rowtarde = contributor.rowtrade;
+                    int rowyear = contributor.rowyear;
+                    int rowmonth = contributor.rowmonth;
+                    String updatetime = contributor.updatetime;
+
+
+                    Log.e("dhxodn88", "" + si + " / " + year + " / " + month + " / " + yearmonth + " ---> "
+                            + trade + "(" + per + "%)" + " /  (최고거래건수 : " + highyear + "년 " + highmonth + "월 / " + hightrade + ")"
+                            + " (최저거래건수 : " + rowyear + "년 " + rowmonth + "월 / " + rowtarde + " / 업데이트 시간 : " + updatetime + " / " + ym + ")");
+
+
+                    float y = Float.parseFloat(ym);
+                    float p = trade;
+                    Object o = per;
+
+
+                    Log.e("sizecheck", "" + y + " / " + p + " / " + o);
+                    bentries.add(new Entry(y, p, o));
+
+
+                }
+
+                bentries_c = 1;
+                Collections.sort(bentries, new EntryXComparator());
+                if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+
+                    Datasetting1();
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Daydatalistitem>> call, Throwable t) {
+//                Toast.makeText(MainActivity.this, "정보받아오기 실패 " + t, Toast.LENGTH_LONG)
+//                        .show();
+
+                Log.e("onFailure", "- > " + t);
+
+            }
+        });
+
+
+    }
+
+    public void Rtongsin(String jiyeok) { // 서버 데이터를 가지고 온다 파라미터는 불러올 테이블 이름
+
+        Object z = "48.5";
+
+        rentries.add(new Entry((float) 2001.4, (float) 16 + 2, z));
+        rentries.add(new Entry((float) 2007.6, (float) 18 + 2, z));
+        rentries.add(new Entry((float) 2010.2, (float) 20 + 2, z));
+        rentries.add(new Entry((float) 2012.2, (float) 22 + 2, z));
+        rentries.add(new Entry((float) 2014.2, (float) 20 + 2, z));
+        rentries.add(new Entry((float) 2017.6, (float) 23.5 + 2, z));
+        rentries.add(new Entry((float) 2019.8, (float) 28 + 2, z));
+        rentries.add(new Entry((float) 2021.5, (float) 28.9 + 2, z));
+        rentries.add(new Entry((float) 2021.6, (float) 31 + 2, z));
+        rentries.add(new Entry((float) 2022.11, (float) 32 + 2, z));
+        rentries.add(new Entry((float) 2023.8, (float) 34.5 + 2, z));
+
+
+        rentries_c = 1;
+        Collections.sort(rentries, new EntryXComparator());
+        if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+
+            Datasetting1();
+
+        }
+
+
+    }
+
+
+    public void Mtongsin(String jiyeok) { // 서버 데이터를 가지고 온다 파라미터는 불러올 테이블 이름
+
+        Object z = "48.5";
+
+        mentries.add(new Entry((float) 2007.6, (float) 18 - 3, z));
+        mentries.add(new Entry((float) 2010.2, (float) 20 - 3, z));
+        mentries.add(new Entry((float) 2012.2, (float) 22 - 3, z));
+        mentries.add(new Entry((float) 2014.2, (float) 20 - 3, z));
+        mentries.add(new Entry((float) 2017.6, (float) 23.5 - 3, z));
+        mentries.add(new Entry((float) 2019.8, (float) 28 - 3, z));
+        mentries.add(new Entry((float) 2021.5, (float) 28.9 - 3, z));
+        mentries.add(new Entry((float) 2021.6, (float) 31 - 3, z));
+        mentries.add(new Entry((float) 2022.11, (float) 32 - 3, z));
+        mentries.add(new Entry((float) 2023.8, (float) 34.5 - 3, z));
+
+
+        mentries_c = 1;
+        Collections.sort(mentries, new EntryXComparator());
+        if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+
+            Datasetting1();
+
+        }
+
+    }
+
+    public void btnGone() {
+
+
+        if (bentries.size() > 0) {
+
+
+            m1.setVisibility(View.VISIBLE);
+        }
+
+
+        if (rentries.size() > 0) {
+
+
+            j1.setVisibility(View.VISIBLE);
+        }
+
+
+        if (mentries.size() > 0) {
+
+            g1.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    public void Datasetting1() {
+
+        btnGone();
+        Buyset();
+        Rentset();
+        Monthset();
+
+
+//        max = bentries.get(bentries.size() - 1).getX();
+//        min = bentries.get(0).getX();
+
+        MaxX();
+
+
+
+        Log.e("맥스민", "-->" + maxx + " / " + minx);
+        float minus = maxx - minx;
         int i = (int) minus;
 
 
@@ -113,22 +541,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-
-        Chartsetting();
+        btncheck1();
+        Datasetting2();
 
 
     }
 
+
+    public void MaxX() {  //비지블
+
+
+
+            if (rentries.get(rentries.size() - 1).getX() > bentries.get(bentries.size() - 1).getX()) {
+
+                maxx = bentries.get(bentries.size() - 1).getX();
+            } else if (rentries.get(rentries.size() - 1).getX() < bentries.get(bentries.size() - 1).getX()) {
+                maxx = bentries.get(bentries.size() - 1).getX();
+            } else if (rentries.get(rentries.size() - 1).getX() == bentries.get(bentries.size() - 1).getX()) {
+
+                maxx = bentries.get(bentries.size() - 1).getX();
+            }
+
+
+            if (maxx > mentries.get(mentries.size() - 1).getX()) {
+
+
+            } else {
+
+
+                maxx = mentries.get(mentries.size() - 1).getX();
+            }
+
+
+            if (rentries.get(0).getX() > bentries.get(0).getX()) {
+
+
+                minx = bentries.get(0).getX();
+            } else if (rentries.get(0).getX() < bentries.get(0).getX()) {
+
+                minx = rentries.get(0).getX();
+
+            } else {
+
+                minx = rentries.get(0).getX();
+            }
+
+
+            if (minx < mentries.get(0).getX()) {
+
+
+            } else {
+
+
+                minx = mentries.get(0).getX();
+            }
+
+
+
+    }
+
+
+
+
     public void Findview() {
         linechartday = 100;
         entries = new ArrayList<>();
+        bentries = new ArrayList<>();
+        rentries = new ArrayList<>();
+        mentries = new ArrayList<>();
         marker = new MyMarkerView(this, R.layout.markerviewtext);
+        lineData = new LineData();
+        linechartlayout10 = (RelativeLayout) findViewById(R.id.linechartlayout10);
+        linechartlayout2 = (RelativeLayout) findViewById(R.id.linechartlayout2);
+        linechartlayout3 = (RelativeLayout) findViewById(R.id.linechartlayout3);
+        linechartlayout4 = (RelativeLayout) findViewById(R.id.linechartlayout4);
 
         lineChart = (LineChart) findViewById(R.id.linechart);
-        chartymd = (TextView) findViewById(R.id.chartymd);
-        chartpirce = (TextView) findViewById(R.id.chartpirce);
-        chartgunsu = (TextView) findViewById(R.id.chartgunsu);
 
+        m1 = (CardView) findViewById(R.id.m1);
+        j1 = (CardView) findViewById(R.id.j1);
+        g1 = (CardView) findViewById(R.id.w1);
+
+        m2 = (TextView) findViewById(R.id.m2);
+        j2 = (TextView) findViewById(R.id.j2);
+        g2 = (TextView) findViewById(R.id.w2);
 
         Linecharttext1 = (TextView) findViewById(R.id.Linecharttext1);
         Linecharttext2 = (TextView) findViewById(R.id.Linecharttext2);
@@ -140,30 +636,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Linecharttype3 = (CardView) findViewById(R.id.Linecharttype3);
         Linecharttype100 = (CardView) findViewById(R.id.Linecharttype100);
 
+
+        chartymd = (TextView) findViewById(R.id.chartymd);
+        chartpirce = (TextView) findViewById(R.id.chartpirce);
+        chartgunsu = (TextView) findViewById(R.id.chartgusnu);
+
+
+        rchartymd = (TextView) findViewById(R.id.rchartymd);
+        rchartpirce = (TextView) findViewById(R.id.rchartpirce);
+        rchartgunsu = (TextView) findViewById(R.id.rchartgusnu);
+
+        mchartymd = (TextView) findViewById(R.id.mchartymd);
+        mchartpirce = (TextView) findViewById(R.id.mchartpirce);
+        mchartgunsu = (TextView) findViewById(R.id.mchartgusnu);
+
         Linecharttype1.setOnClickListener(this::onClick);
         Linecharttype2.setOnClickListener(this::onClick);
         Linecharttype3.setOnClickListener(this::onClick);
         Linecharttype100.setOnClickListener(this::onClick);
 
+        m1.setOnClickListener(this::onClick);
+        j1.setOnClickListener(this::onClick);
+        g1.setOnClickListener(this::onClick);
+
+
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void Timelimit() {
 
 
         if (linechartday == 100) {
 
-            max = entries.get(entries.size() - 1).getX();
-            min = entries.get(0).getX();
-            lineChart.setData(lineData);
 
+            lineChart.setData(lineData);
 
 
             xAxis.setLabelCount((int) xterm, true);
 
-            xAxis.setAxisMinimum(min);
+            xAxis.setAxisMinimum(minx);
 
 
-            xAxis.setAxisMaximum(max);
+            xAxis.setAxisMaximum(maxx);
             lineChart.invalidate();
 
 
@@ -186,11 +700,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             lineChart.setData(lineData);
 
-            this.min = max - 3; ///////// 최근 3년
+            this.minx = maxx - 3; ///////// 최근 3년
 
             xAxis.setLabelCount(4, true);
-            xAxis.setAxisMinimum(this.min);
-            xAxis.setAxisMaximum(max);
+            xAxis.setAxisMinimum(this.minx);
+            xAxis.setAxisMaximum(maxx);
 
             lineChart.invalidate();
 
@@ -213,11 +727,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lineChart.setData(lineData);
 
 
-            this.min = max - 5;///////// 최근 5년
+            this.minx = maxx - 5;///////// 최근 5년
 
             xAxis.setLabelCount(5, true);
-            xAxis.setAxisMinimum(this.min);
-            xAxis.setAxisMaximum(max);
+            xAxis.setAxisMinimum(this.minx);
+            xAxis.setAxisMaximum(maxx);
             lineChart.invalidate();
 
             Linecharttype2.setCardBackgroundColor(getColor(R.color.On_Btcolor));
@@ -239,11 +753,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lineChart.setData(lineData);
 
 
-            this.min = max - 10;///////// 최근 10년
+            this.minx = maxx - 10;///////// 최근 10년
 
             xAxis.setLabelCount(6, true);
-            xAxis.setAxisMinimum(this.min);
-            xAxis.setAxisMaximum(max);
+            xAxis.setAxisMinimum(this.minx);
+            xAxis.setAxisMaximum(maxx);
 
             lineChart.invalidate();
 
@@ -266,45 +780,98 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-    public void Chartsetting() {
 
-         lineDataSet = new LineDataSet(entries, "");
-//        lineDataSet.setLineWidth(2);
-//        lineDataSet.setCircleRadius(6);
-//        lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
-//        lineDataSet.setCircleColorHole(Color.BLUE);
-//        lineDataSet.setColor(Color.parseColor("#FFA1B4DC"));
-//        lineDataSet.setDrawCircleHole(true);
-//        lineDataSet.setDrawCircles(true);
-//        lineDataSet.setDrawHorizontalHighlightIndicator(true);
-//        lineDataSet.setDrawHighlightIndicators(true);
-//        lineDataSet.setDrawValues(true);
+    public void Buyset() {
 
+        BDataSet = new LineDataSet(bentries, "DataSet 1");
 
-        lineDataSet.setLineWidth(2);
-        lineDataSet.setCircleRadius(1);
-        lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
+        BDataSet.setLineWidth(2);
+        BDataSet.setCircleRadius(1);
+        BDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
         // lineDataSet.setCircleColorHole(Color.BLUE);
-        lineDataSet.setColor(Color.parseColor("#FFA1B4DC"));
-        lineDataSet.setDrawCircleHole(true);
-        lineDataSet.setDrawCircles(true);
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawHighlightIndicators(false);
-        lineDataSet.setDrawValues(false);
+        BDataSet.setColor(Color.parseColor("#FFA1B4DC"));
+        BDataSet.setDrawCircleHole(true);
+        BDataSet.setDrawCircles(true);
+        BDataSet.setDrawHorizontalHighlightIndicator(false);
+        BDataSet.setDrawHighlightIndicators(false);
+        BDataSet.setDrawValues(false);
+
+
+        lineData.addDataSet(BDataSet);
+    }
+
+    @Override
+    public void onBackPressed() { //앱 강제 종료
+        if (System.currentTimeMillis() > backpressedTime + 2000) {
+            backpressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            finish();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void Rentset() {
+
+        RDataSet = new LineDataSet(rentries, "전세");
+        RDataSet.setLineWidth(2);
+        RDataSet.setCircleRadius(1);
+        RDataSet.setCircleColor(getColor(R.color.j_btn));
+        //lineDataSet2.setCircleColorHole(Color.parseColor("#FF4500"));
+        RDataSet.setColor(getColor(R.color.j_btn));
+
+        // lineDataSet2.setDrawCircleHole(true);
+        RDataSet.setDrawCircles(true);
+        RDataSet.setDrawHorizontalHighlightIndicator(false);
+        RDataSet.setDrawHighlightIndicators(false);
+        RDataSet.setDrawValues(false);
+
+        lineData.addDataSet(RDataSet);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void Monthset() {
+
+
+        MDataSet = new LineDataSet(mentries, "월세");
+        MDataSet.setLineWidth(2);
+        MDataSet.setCircleRadius(1);
+        MDataSet.setCircleColor(getColor(R.color.w_btn));
+        //lineDataSet2.setCircleColorHole(Color.parseColor("#FF4500"));
+        MDataSet.setColor(getColor(R.color.w_btn));
+
+        // lineDataSet2.setDrawCircleHole(true);
+        MDataSet.setDrawCircles(true);
+        MDataSet.setDrawHorizontalHighlightIndicator(false);
+        MDataSet.setDrawHighlightIndicators(false);
+        MDataSet.setDrawValues(false);
+
+        lineData.addDataSet(MDataSet);
+
+
+    }
+
+    public void Datasetting2() {
+
 
         Legend l = lineChart.getLegend();
         l.setEnabled(false);
 
 
-
-         lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
 
-         xAxis = lineChart.getXAxis();
+        xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.enableGridDashedLine(8, 24, 0);
+        xAxis.setAxisMinimum(minx);
+
+
+        xAxis.setAxisMaximum(maxx);
+
+
         xAxis.setLabelCount((int) 7, true);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
@@ -321,10 +888,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-         yLAxis = lineChart.getAxisLeft();
+        yLAxis = lineChart.getAxisLeft();
         yLAxis.setTextColor(Color.BLACK);
 
+        yLAxis.setLabelCount(5, true);
+
         YAxis yRAxis = lineChart.getAxisRight();
+
         yRAxis.setDrawLabels(false);
         yRAxis.setDrawAxisLine(false);
         yRAxis.setDrawGridLines(false);
@@ -393,6 +963,110 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 linechartday = 3;
                 Timelimit();
                 break;
+
+            case R.id.m1:
+
+                if (b_btn == 1) { // offf
+
+                    BDataSet.setVisible(false);
+                    lineChart.invalidate();
+
+                    linechartlayout2.setVisibility(View.GONE);
+
+
+                    m1.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+                    m2.setTextColor(getColor(R.color.Off_Tcolor));
+                    b_btn = 0;
+
+                } else {  // on
+
+                   // Timelimit();
+                    BDataSet.setVisible(true);
+                    lineChart.invalidate();
+                    if (infor == 1) {
+                        linechartlayout2.setVisibility(View.VISIBLE);
+                    }
+
+                    m1.setCardBackgroundColor(getColor(R.color.m_btn));
+                    m2.setTextColor(getColor(R.color.On_Textwcolor));
+
+                    b_btn = 1;
+                }
+
+                break;
+
+            case R.id.j1:
+
+
+                if (j_btn == 1) { //off
+
+
+                    RDataSet.setVisible(false);
+                    lineChart.invalidate();
+                    linechartlayout3.setVisibility(View.GONE);
+                    j1.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+                    j2.setTextColor(getColor(R.color.Off_Tcolor));
+
+
+                    j_btn = 0;
+
+
+                } else {  // on
+
+                   // Timelimit();
+                    RDataSet.setVisible(true);
+                    lineChart.invalidate();
+                    if (infor == 1) {
+                        linechartlayout3.setVisibility(View.VISIBLE);
+                    }
+                    j1.setCardBackgroundColor(getColor(R.color.j_btn));
+                    j2.setTextColor(getColor(R.color.On_Textwcolor));
+
+                    j_btn = 1;
+
+                }
+
+
+                /////////////////////////////////////////////////////////////////////////
+                break;
+
+            case R.id.w1:
+
+
+                if (m_btn == 1) {     //   offf
+
+
+                    MDataSet.setVisible(false);
+                    lineChart.invalidate();
+
+                    linechartlayout4.setVisibility(View.GONE);
+
+                    g1.setCardBackgroundColor(getColor(R.color.off_Btcolor));
+                    g2.setTextColor(getColor(R.color.Off_Tcolor));
+
+                    m_btn = 0;
+
+
+                } else {
+                   // Timelimit();
+                    MDataSet.setVisible(true);
+                    lineChart.invalidate();
+
+                    if (infor == 1) {
+                        linechartlayout4.setVisibility(View.VISIBLE);
+                    }
+                    g1.setCardBackgroundColor(getColor(R.color.w_btn));
+                    g2.setTextColor(getColor(R.color.On_Textwcolor));
+
+
+                    m_btn = 1;
+
+
+                }
+
+
+                break;
+
         }
     }
 }

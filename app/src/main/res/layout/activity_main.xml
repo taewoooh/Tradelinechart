@@ -6,13 +6,199 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/mainmenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:padding="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/m1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/m_btn"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/m2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="매매"
+                    android:textColor="@color/On_Textwcolor"
+                    android:textSize="13dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/j1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/j_btn"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/j2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="전세"
+                    android:textColor="@color/On_Textwcolor"
+                    android:textSize="13dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/w1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/w_btn"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/w2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="월세"
+                    android:textColor="@color/On_Textwcolor"
+                    android:textSize="13dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/n1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:cardBackgroundColor="@android:color/holo_green_light"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/n2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="N 매물"
+                    android:textColor="@color/On_Textwcolor"
+                    android:textSize="13dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/py1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_toRightOf="@+id/mmj1"
+
+            app:cardBackgroundColor="@color/off_Btcolor"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:id="@+id/py3layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/py2"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="13dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
+                <ImageView
+                    android:id="@+id/py3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="0dp"
+                    android:layout_toRightOf="@+id/py2"
+                    android:src="@drawable/nameinfor">
+
+                </ImageView>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+
 
     <RelativeLayout
         android:id="@+id/linechartlayout"
         android:layout_width="wrap_content"
+        android:layout_below="@+id/mainmenu"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="10dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview1"
@@ -264,45 +450,201 @@
     </RelativeLayout>
 
     <RelativeLayout
+
+        android:id="@+id/linechartlayout10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linechartlayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/TIP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="Tip"
+            android:textColor="@color/black"
+            android:textStyle="bold"></TextView>
+
+
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:text="위 라인차트 파란(매매)선 선택후 라인 따라 드래그 해보세요 !"
+
+            android:layout_toRightOf="@+id/TIP"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12dp">
+
+
+        </TextView>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/infortext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginBottom="5dp"
         android:layout_below="@+id/linechartlayout">
+        <RelativeLayout
 
-        <TextView
-            android:id="@+id/chartymd"
+            android:id="@+id/linechartlayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone">
 
-            android:textColor="@color/lineclor"
-            android:textSize="@dimen/charsize"
-            android:textStyle="bold">
 
-        </TextView>
+            <TextView
+                android:id="@+id/chartymd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="매매 : 거래내역 없음"
+                android:textColor="@color/m_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
 
-        <TextView
-            android:id="@+id/chartpirce"
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/chartpirce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/chartymd"
+                android:textColor="@color/m_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/chartgusnu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/chartpirce"
+                android:textColor="@color/m_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+
+            android:id="@+id/linechartlayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/chartymd"
-            android:textColor="@color/lineclor"
-            android:textSize="@dimen/charsize"
-            android:textStyle="bold">
+            android:layout_below="@+id/linechartlayout2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone">
 
-        </TextView>
 
-        <TextView
-            android:id="@+id/chartgunsu"
+            <TextView
+                android:id="@+id/rchartymd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/j_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/rchartpirce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rchartymd"
+                android:textColor="@color/j_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/rchartgusnu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rchartpirce"
+                android:text="전세 : 거래내역 없음"
+                android:textColor="@color/j_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+
+            android:id="@+id/linechartlayout4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/chartpirce"
-            android:textColor="@color/lineclor"
-            android:textSize="@dimen/charsize"
-            android:textStyle="bold">
+            android:layout_below="@+id/linechartlayout3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone">
 
-        </TextView>
+
+            <TextView
+                android:id="@+id/mchartymd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/w_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/mchartpirce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/mchartymd"
+                android:textColor="@color/w_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/mchartgusnu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/mchartpirce"
+                android:text="전세 : 거래내역 없음"
+                android:textColor="@color/w_btn"
+                android:textSize="@dimen/charsize"
+                android:textStyle="bold">
+
+
+            </TextView>
+        </RelativeLayout>
+
+
 
     </RelativeLayout>
 </RelativeLayout>
