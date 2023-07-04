@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                // Toast.makeText(getApplicationContext(),entries.indexOf(e)+"",Toast.LENGTH_SHORT).show();
 
+                btntext();
                 if (b_btn == 0 && j_btn == 0 && m_btn == 0 ) {
                     vibrator.cancel();
 
@@ -118,102 +118,146 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
 
-                int v = bentries.indexOf(e);
-                String ymd1 = null;
-                String ymd2 = null;
-                String ymd3 = null;
-                int i1 = 0;
-                int i2 = 0;
-                int i3 = 0;
 
-                infor = 1;
+                linechartlayout10.setVisibility(View.GONE);
 
-                try {
+                    int k = entries.indexOf(e);
 
 
-                    linechartlayout10.setVisibility(View.GONE);
-//
+                    if (k > -1) {
+                        String by = String.valueOf(entries.get(k).getX());
+                        String bp = String.valueOf(entries.get(k).getY());
+                        String bg = String.valueOf(entries.get(k).getData());
+
+                        String bp2;
+                        if (b_btn == 0 && j_btn == 0 && m_btn == 1) {
 
 
-                    ymd1 = String.valueOf(bentries.get(v).getX());
-                    ymd2 = String.valueOf(rentries.get(v).getX());
-                    ymd3 = String.valueOf(mentries.get(v).getX());
+                            String my = String.valueOf(mentries.get(k).getX());
+                            String mp = String.valueOf(mentries.get(k).getY());
+                            String mg = String.valueOf(mentries.get(k).getData());
 
-                    int b = ymd1.indexOf(".");
-                    String b2 = ymd1.substring(b + 1);
-                    String b1 = ymd1.substring(0, b);
+                            String mp2;
 
-                    int r = ymd1.indexOf(".");
-                    String r2 = ymd1.substring(r + 1);
-                    String r1 = ymd1.substring(0, r);
+                            my = new Util().Yearchange(my);
 
-                    int m = ymd1.indexOf(".");
-                    String m2 = ymd1.substring(m = +1);
-                    String m1 = ymd1.substring(0, m);
+                            mp2 = String.valueOf(mentries.get(k).getY());
+                            int b = mp2.indexOf(".");
+                            mp2 = mp2.substring(0, b);
 
 
-                    if (b2.equals("91")) {
-                        ymd1 = b1 + "." + "10";
+                            btntext();
 
-                    } else if (b2.equals("92")) {
-                        ymd1 = b1 + "." + "11";
 
-                    } else if (b2.equals("93")) {
-                        ymd1 = b1 + "." + "12";
+
+
+                            mchartymd.setText("매매 : " + my + "월 / ");
+                            mchartpirce.setText("거래건수 : " + mp2 + " 건 / ");
+                            mchartgunsu.setText(mg + " %");
+
+                        } else {
+
+
+                            by = new Util().Yearchange(by); // 년월일 90 --- > 10월 변경
+
+                            bp2 = String.valueOf(bentries.get(k).getY());
+                            int b = bp2.indexOf(".");
+                            bp2 = bp2.substring(0, b);
+
+
+
+                            btntext();
+
+
+                            chartymd.setText("매매 : " + by + "월 / ");
+                            chartpirce.setText("거래건수 : " + bp2 + " 건 / ");
+                            chartgunsu.setText(bg + " %");
+
+
+                        }
+
+
+                        for (int i = 0; i < rentries.size(); i++) {
+
+
+                            String ry = String.valueOf(rentries.get(i).getX());
+                            String rp = String.valueOf(rentries.get(i).getY());
+                            String rg = String.valueOf(rentries.get(i).getData());
+
+
+
+                            String rp2;
+
+                            String my = String.valueOf(mentries.get(i).getX());
+                            String mp = String.valueOf(mentries.get(i).getY());
+                            String mg = String.valueOf(mentries.get(i).getData());
+
+                            String mp2;
+
+                            ry = new Util().Yearchange(ry); // 90 --- > 10월 변경
+                           // rp2 = new Util().Pricechange(rentries.get(i).getY());
+
+                            if (by.equals(ry)) {
+
+
+                                if (b_btn == 1 && j_btn == 1) {
+
+
+                                    int r = rp.indexOf(".");
+                                    rp = rp.substring(0, r);
+
+
+                                    rchartymd.setText("전세 : " + ry + "월 / ");
+                                    rchartpirce.setText("거래건수 : " + rp + " 건 / ");
+                                    rchartgunsu.setText(rg + "%");
+
+
+
+
+
+
+
+                                    my = new Util().Yearchange(my);
+
+                                    mp2 = String.valueOf(mentries.get(i).getY());
+                                    int b = mp2.indexOf(".");
+                                    mp2 = mp2.substring(0, b);
+
+
+                                    btntext();
+
+
+
+
+                                    mchartymd.setText("월세 : " + my + "월 / ");
+                                    mchartpirce.setText("거래건수 : " + mp2 + " 건 / ");
+                                    mchartgunsu.setText(mg + " %");
+
+
+
+
+
+                                } else if (b_btn == 0 && j_btn == 1) {
+
+                                    btntext();
+                                    rchartymd.setText("전세 : " + ry + "월 / ");
+                                    rchartpirce.setText("평균 " + rp + " / ");
+                                    rchartgunsu.setText(rg + "%");
+
+
+                                }
+                            }
+
+                        }
+
+
+
 
                     }
 
 
-                    if (r2.equals("91")) {
-                        ymd2 = r1 + "." + "10";
+                    //   scrollView.setNestedScrollingEnabled(false);
 
-                    } else if (r2.equals("92")) {
-                        ymd2 = r1 + "." + "11";
-
-                    } else if (r2.equals("93")) {
-                        ymd2 = r1 + "." + "12";
-
-                    }
-
-
-                    if (m2.equals("91")) {
-                        ymd3 = m1 + "." + "10";
-
-                    } else if (m2.equals("92")) {
-                        ymd3 = m1 + "." + "11";
-
-                    } else if (m2.equals("93")) {
-                        ymd3 = m1 + "." + "12";
-
-                    }
-                    Log.e("테스트", "" + b1 + " / " + b2 + " / " + ymd1);
-
-
-                    i1 = (int) bentries.get(v).getY();
-                    i2 = (int) rentries.get(v).getY();
-                    i3 = (int) rentries.get(v).getY();
-
-
-                    btntext();
-
-
-                    chartymd.setText(ymd1 + "월 / ");
-                    chartpirce.setText("거래건수 : " + String.valueOf(i1) + " / 최고건수대비율 : ");
-                    chartgunsu.setText(bentries.get(v).getData() + " %");
-
-                    rchartymd.setText(ymd2 + "월 / ");
-                    rchartpirce.setText("거래건수 : " + String.valueOf(i2) + " / 최고건수대비율 : ");
-                    rchartgunsu.setText(rentries.get(v).getData() + " %");
-
-                    mchartymd.setText(ymd3 + "월 / ");
-                    mchartpirce.setText("거래건수 : " + String.valueOf(i3) + " / 최고건수대비율 : ");
-                    mchartgunsu.setText(mentries.get(v).getData() + " %");
-
-
-                } catch (Exception s) {
-
-
-                }
 
 
             }
@@ -281,9 +325,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //시발
         xAxis.enableGridDashedLine(8, 24, 0);
-        Log.e("기간체크",""+new TWPreference(this).getInt("기간",100));
+        Log.e("기간체크", "" + new TWPreference(this).getInt("기간", 100));
 
-        if (new TWPreference(this).getInt("기간",100) == 100) {
+        if (new TWPreference(this).getInt("기간", 100) == 100) {
 
 
             lineChart.setData(lineData);
@@ -310,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Linecharttext2.setTextColor(getColor(R.color.Off_Textcolor));
 
 
-        } else if (new TWPreference(this).getInt("기간",100) == 1) {
+        } else if (new TWPreference(this).getInt("기간", 100) == 1) {
 
 
             linechartday = 1;
@@ -338,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Linecharttext2.setTextColor(getColor(R.color.Off_Textcolor));
 
 
-        } else if (new TWPreference(this).getInt("기간",100) == 2) {
+        } else if (new TWPreference(this).getInt("기간", 100) == 2) {
 
 
             lineChart.setData(lineData);
@@ -365,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Linecharttext100.setTextColor(getColor(R.color.Off_Textcolor));
 
 
-        } else if (new TWPreference(this).getInt("기간",100) == 3) {
+        } else if (new TWPreference(this).getInt("기간", 100) == 3) {
 
             lineChart.setData(lineData);
 
@@ -402,19 +446,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.e("BTNCHECK", "" + b_btn + " / " + j_btn + " / " + m_btn);
 
         if (b_btn == 1 && j_btn == 0 && m_btn == 0) {
-
+            entries = bentries;
             linechartlayout2.setVisibility(View.VISIBLE);
             linechartlayout3.setVisibility(View.GONE);
             linechartlayout4.setVisibility(View.GONE);
 
 
         } else if (b_btn == 0 && j_btn == 1 && m_btn == 0) {
+            entries = rentries;
             linechartlayout2.setVisibility(View.GONE);
             linechartlayout3.setVisibility(View.VISIBLE);
             linechartlayout4.setVisibility(View.GONE);
 
         } else if (b_btn == 0 && j_btn == 0 && m_btn == 1) {
-
+            entries = mentries;
             linechartlayout2.setVisibility(View.GONE);
             linechartlayout3.setVisibility(View.GONE);
             linechartlayout4.setVisibility(View.VISIBLE);
@@ -424,19 +469,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             linechartlayout3.setVisibility(View.GONE);
             linechartlayout4.setVisibility(View.GONE);
         } else if (b_btn == 1 && j_btn == 1 && m_btn == 0) {   //
+            entries = bentries;
             linechartlayout2.setVisibility(View.VISIBLE);
             linechartlayout3.setVisibility(View.VISIBLE);
             linechartlayout4.setVisibility(View.GONE);
         } else if (b_btn == 1 && j_btn == 0 && m_btn == 1) { // 2
+            entries = bentries;
             linechartlayout2.setVisibility(View.VISIBLE);
             linechartlayout3.setVisibility(View.GONE);
             linechartlayout4.setVisibility(View.VISIBLE);
         } else if (b_btn == 0 && j_btn == 1 && m_btn == 1) { /// 3
+            entries = rentries;
             linechartlayout2.setVisibility(View.GONE);
             linechartlayout3.setVisibility(View.VISIBLE);
             linechartlayout4.setVisibility(View.VISIBLE);
         } else if (b_btn == 1 && j_btn == 1 && m_btn == 1) { /// 3
-
+            entries = bentries;
             linechartlayout2.setVisibility(View.VISIBLE);
             linechartlayout3.setVisibility(View.VISIBLE);
             linechartlayout4.setVisibility(View.VISIBLE);
@@ -469,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // progressDialog.show();
         init();
-        Daydatagithup gitHub = retrofit.create(Daydatagithup.class);
+        Atradegithub gitHub = retrofit.create(Atradegithub.class);
         Call<List<Daydatalistitem>> call = gitHub.contributors(today);
         call.enqueue(new Callback<List<Daydatalistitem>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -520,6 +568,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 bentries_c = 1;
                 Collections.sort(bentries, new EntryXComparator());
+                entries = bentries;
+
                 if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
 
                     Datasetting1();
@@ -545,28 +595,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void Rtongsin(String jiyeok) { // 서버 데이터를 가지고 온다 파라미터는 불러올 테이블 이름
 
-        Object z = "48.5";
+        // progressDialog.show();
+        init();
+        Atradegithub1 gitHub = retrofit.create(Atradegithub1.class);
+        Call<List<Daydatalistitem>> call = gitHub.contributors(jiyeok);
+        call.enqueue(new Callback<List<Daydatalistitem>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            // 성공시
+            public void onResponse(Call<List<Daydatalistitem>> call, Response<List<Daydatalistitem>> result) {
+                List<Daydatalistitem> contributors = result.body();
+                // 받아온 리스트를 순회하면서
 
-        rentries.add(new Entry((float) 2001.4, (float) 16 + 2, z));
-        rentries.add(new Entry((float) 2007.6, (float) 18 + 2, z));
-        rentries.add(new Entry((float) 2010.2, (float) 20 + 2, z));
-        rentries.add(new Entry((float) 2012.2, (float) 22 + 2, z));
-        rentries.add(new Entry((float) 2014.2, (float) 20 + 2, z));
-        rentries.add(new Entry((float) 2017.6, (float) 23.5 + 2, z));
-        rentries.add(new Entry((float) 2019.8, (float) 28 + 2, z));
-        rentries.add(new Entry((float) 2021.5, (float) 28.9 + 2, z));
-        rentries.add(new Entry((float) 2021.6, (float) 31 + 2, z));
-        rentries.add(new Entry((float) 2022.11, (float) 32 + 2, z));
-        rentries.add(new Entry((float) 2023.8, (float) 34.5 + 2, z));
+                Log.e("Test888", result.body().toString());
+
+                for (Daydatalistitem contributor : contributors) {
 
 
-        rentries_c = 1;
-        Collections.sort(rentries, new EntryXComparator());
-        if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+                    String si = contributor.si;
+                    int year = contributor.year;
+                    int month = contributor.month;
+                    int yearmonth = contributor.yearmonth;
+                    int trade = contributor.trade;
+                    String per = contributor.per;
+                    String ym = contributor.ym;
 
-            Datasetting1();
+                    int hightrade = contributor.hightrade;
+                    int highyear = contributor.highyear;
+                    int highmonth = contributor.highmonth;
 
-        }
+                    int rowtarde = contributor.rowtrade;
+                    int rowyear = contributor.rowyear;
+                    int rowmonth = contributor.rowmonth;
+                    String updatetime = contributor.updatetime;
+
+
+                    Log.e("rent", "" + si + " / " + year + " / " + month + " / " + yearmonth + " ---> "
+                            + trade + "(" + per + "%)" + " /  (최고거래건수 : " + highyear + "년 " + highmonth + "월 / " + hightrade + ")"
+                            + " (최저거래건수 : " + rowyear + "년 " + rowmonth + "월 / " + rowtarde + " / 업데이트 시간 : " + updatetime + " / " + ym + ")");
+
+
+                    float y = Float.parseFloat(ym);
+                    float p = trade;
+                    Object o = per;
+
+
+                    Log.e("sizecheck", "" + y + " / " + p + " / " + o);
+                    rentries.add(new Entry(y, p, o));
+
+
+                }
+
+                rentries_c = 1;
+                Collections.sort(rentries, new EntryXComparator());
+                if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+
+                    Datasetting1();
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Daydatalistitem>> call, Throwable t) {
+//                Toast.makeText(MainActivity.this, "정보받아오기 실패 " + t, Toast.LENGTH_LONG)
+//                        .show();
+
+                Log.e("onFailure", "- > " + t);
+
+            }
+        });
 
 
     }
@@ -574,27 +674,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void Mtongsin(String jiyeok) { // 서버 데이터를 가지고 온다 파라미터는 불러올 테이블 이름
 
-        Object z = "48.5";
+        // progressDialog.show();
+        init();
+        Atradegithub2 gitHub = retrofit.create(Atradegithub2.class);
+        Call<List<Daydatalistitem>> call = gitHub.contributors(jiyeok);
+        call.enqueue(new Callback<List<Daydatalistitem>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            // 성공시
+            public void onResponse(Call<List<Daydatalistitem>> call, Response<List<Daydatalistitem>> result) {
+                List<Daydatalistitem> contributors = result.body();
+                // 받아온 리스트를 순회하면서
 
-        mentries.add(new Entry((float) 2007.6, (float) 18 - 3, z));
-        mentries.add(new Entry((float) 2010.2, (float) 20 - 3, z));
-        mentries.add(new Entry((float) 2012.2, (float) 22 - 3, z));
-        mentries.add(new Entry((float) 2014.2, (float) 20 - 3, z));
-        mentries.add(new Entry((float) 2017.6, (float) 23.5 - 3, z));
-        mentries.add(new Entry((float) 2019.8, (float) 28 - 3, z));
-        mentries.add(new Entry((float) 2021.5, (float) 28.9 - 3, z));
-        mentries.add(new Entry((float) 2021.6, (float) 31 - 3, z));
-        mentries.add(new Entry((float) 2022.11, (float) 32 - 3, z));
-        mentries.add(new Entry((float) 2023.8, (float) 34.5 - 3, z));
+                Log.e("Test888", result.body().toString());
+
+                for (Daydatalistitem contributor : contributors) {
 
 
-        mentries_c = 1;
-        Collections.sort(mentries, new EntryXComparator());
-        if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+                    String si = contributor.si;
+                    int year = contributor.year;
+                    int month = contributor.month;
+                    int yearmonth = contributor.yearmonth;
+                    int trade = contributor.trade;
+                    String per = contributor.per;
+                    String ym = contributor.ym;
 
-            Datasetting1();
+                    int hightrade = contributor.hightrade;
+                    int highyear = contributor.highyear;
+                    int highmonth = contributor.highmonth;
 
-        }
+                    int rowtarde = contributor.rowtrade;
+                    int rowyear = contributor.rowyear;
+                    int rowmonth = contributor.rowmonth;
+                    String updatetime = contributor.updatetime;
+
+
+                    Log.e("month", "" + si + " / " + year + " / " + month + " / " + yearmonth + " ---> "
+                            + trade + "(" + per + "%)" + " /  (최고거래건수 : " + highyear + "년 " + highmonth + "월 / " + hightrade + ")"
+                            + " (최저거래건수 : " + rowyear + "년 " + rowmonth + "월 / " + rowtarde + " / 업데이트 시간 : " + updatetime + " / " + ym + ")");
+
+
+                    float y = Float.parseFloat(ym);
+                    float p = trade;
+                    Object o = per;
+
+
+                    Log.e("sizecheck", "" + y + " / " + p + " / " + o);
+                    mentries.add(new Entry(y, p, o));
+
+
+                }
+
+                mentries_c = 1;
+                Collections.sort(mentries, new EntryXComparator());
+                if (rentries_c == 1 && bentries_c == 1 && mentries_c == 1) {
+
+                    Datasetting1();
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Daydatalistitem>> call, Throwable t) {
+//                Toast.makeText(MainActivity.this, "정보받아오기 실패 " + t, Toast.LENGTH_LONG)
+//                        .show();
+
+                Log.e("onFailure", "- > " + t);
+
+            }
+        });
 
     }
 
@@ -637,7 +788,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MaxX();
         //MaxY();
-
 
 
         Log.e("맥스민", "-->" + maxx + " / " + minx);
@@ -709,7 +859,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
 
 
     public void MaxY() {  //비지블
@@ -1015,7 +1164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void Datasetting2() {
 
-        Log.e("기간체크",""+new TWPreference(this).getInt("기간",100));
+        Log.e("기간체크", "" + new TWPreference(this).getInt("기간", 100));
         Legend l = lineChart.getLegend();
         l.setEnabled(false);
 
@@ -1044,8 +1193,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         yLAxis.setAxisMinimum(0);
 
 
-        Log.e("거래건수체킹","-->"+bentries.get(bentries.size()-1).getY()+" / "+rentries.get(rentries.size()-1).getY()+" / "+mentries.get(mentries.size()-1).getY());
-      //  yLAxis.setAxisMaximum(max2 + 4);
+        Log.e("거래건수체킹", "-->" + bentries.get(bentries.size() - 1).getY() + " / " + rentries.get(rentries.size() - 1).getY() + " / " + mentries.get(mentries.size() - 1).getY());
+        //  yLAxis.setAxisMaximum(max2 + 4);
 
         yLAxis.setLabelCount(6, true);
 
