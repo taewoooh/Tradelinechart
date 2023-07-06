@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (by.equals(ry)) {
 
 
-                                if (b_btn == 1 && j_btn == 1) {
+                                if (m_btn == 1 && j_btn == 1) {
 
 
                                     int r = rp.indexOf(".");
@@ -243,6 +243,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     rchartymd.setText("전세 : " + ry + "월 / ");
                                     rchartpirce.setText("평균 " + rp + " / ");
                                     rchartgunsu.setText(rg + "%");
+
+
+                                }else if (b_btn == 1 && j_btn == 1){
+                                    btntext();
+                                    rchartymd.setText("전세 : " + ry + "월 / ");
+                                    rchartpirce.setText("평균 " + rp + " / ");
+                                    rchartgunsu.setText(rg + "%");
+
+
+                                    by = new Util().Yearchange(by); // 년월일 90 --- > 10월 변경
+
+                                    bp2 = String.valueOf(bentries.get(k).getY());
+                                    int b = bp2.indexOf(".");
+                                    bp2 = bp2.substring(0, b);
+
+
+
+                                    btntext();
+
+
+                                    chartymd.setText("매매 : " + by + "월 / ");
+                                    chartpirce.setText("거래건수 : " + bp2 + " 건 / ");
+                                    chartgunsu.setText(bg + " %");
+
+                                }else if(b_btn == 1 && m_btn == 1){
+
+                                    my = new Util().Yearchange(my);
+
+                                    mp2 = String.valueOf(mentries.get(i).getY());
+                                    int b = mp2.indexOf(".");
+                                    mp2 = mp2.substring(0, b);
+
+
+                                    btntext();
+
+
+
+
+                                    mchartymd.setText("월세 : " + my + "월 / ");
+                                    mchartpirce.setText("거래건수 : " + mp2 + " 건 / ");
+                                    mchartgunsu.setText(mg + " %");
+
+                                    by = new Util().Yearchange(by); // 년월일 90 --- > 10월 변경
+
+                                    bp2 = String.valueOf(bentries.get(k).getY());
+                                    int b3 = bp2.indexOf(".");
+                                    bp2 = bp2.substring(0, b3);
+
+
+
+                                    btntext();
+
+
+                                    chartymd.setText("매매 : " + by + "월 / ");
+                                    chartpirce.setText("거래건수 : " + bp2 + " 건 / ");
+                                    chartgunsu.setText(bg + " %");
 
 
                                 }
